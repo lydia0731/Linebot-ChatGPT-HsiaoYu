@@ -10,6 +10,9 @@ ChatGPT很好用，如果打開LINE就能找ChatGPT問問題那就更好用了(?
 
 未來有時間再說(X
 
+LineBot ID：小優　@446ugdid　(開發中，目前只能跟ChatGPT聊天)
+
+
 程式語言：JavaScript
 
 架構：無
