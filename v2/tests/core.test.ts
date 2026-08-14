@@ -1,11 +1,22 @@
 import { createHmac } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
 import type { BotUser, MessageEvent } from "../src/domain/types.js";
+import { USER_SAFE_FALLBACK_MESSAGE } from "../src/controllers/webhook.controller.js";
 import { MessageRouter } from "../src/routers/message.router.js";
 import { createLogger } from "../src/shared/logger.js";
 import { findMatchingRows, normalizeKeyword } from "../src/services/google-sheets.service.js";
 import { LineService } from "../src/services/line.service.js";
 import { UserService } from "../src/services/user.service.js";
+
+describe("Webhook user-safe errors", () => {
+  it("does not expose internal configuration details to LINE users", () => {
+    expect(USER_SAFE_FALLBACK_MESSAGE).not.toContain("GuideNode");
+    expect(USER_SAFE_FALLBACK_MESSAGE).not.toContain("SHEET_ID");
+    expect(USER_SAFE_FALLBACK_MESSAGE).not.toContain("SEARCH_COLUMN");
+    expect(USER_SAFE_FALLBACK_MESSAGE).not.toContain("Error");
+    expect(USER_SAFE_FALLBACK_MESSAGE).toContain("稍後再試");
+  });
+});
 
 describe("normalizeKeyword", () => {
   it("trims spaces and removes unnecessary newlines", () => {

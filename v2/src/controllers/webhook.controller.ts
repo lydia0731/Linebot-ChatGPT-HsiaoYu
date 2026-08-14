@@ -1,11 +1,12 @@
 import type { Request, Response } from "express";
 import type { LineEvent, MessageEvent, PostbackEvent } from "../domain/types.js";
-import { ConfigurationError } from "../shared/errors.js";
 import type { Logger } from "../shared/logger.js";
 import type { MessageRouter } from "../routers/message.router.js";
 import type { PostbackRouter } from "../routers/postback.router.js";
 import type { LineService } from "../services/line.service.js";
 import type { UserService } from "../services/user.service.js";
+
+export const USER_SAFE_FALLBACK_MESSAGE = "這個功能目前暫時無法使用，請稍後再試，或先選擇其他項目喔！";
 
 export class WebhookController {
   constructor(
@@ -56,11 +57,8 @@ export class WebhookController {
         replyMessages = await this.postbacks.route(event as PostbackEvent, user);
       }
     } catch (error) {
-      const text = error instanceof ConfigurationError
-        ? error.message
-        : "攻略資料目前暫時無法讀取，請稍後再試一次。";
       this.logger.error({ err: error, eventType: event.type }, "Event processing error");
-      replyMessages = [this.line.text(text)];
+      replyMessages = [this.line.text(USER_SAFE_FALLBACK_MESSAGE)];
     }
     if (replyMessages) await this.line.reply(replyToken, replyMessages);
   }
