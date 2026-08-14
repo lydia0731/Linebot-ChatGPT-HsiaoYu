@@ -67,6 +67,16 @@ describe("LineService", () => {
     expect((message.contents.contents as unknown[])).toHaveLength(2);
   });
 
+  it("uses the rich-menu blue palette for Flex headers and primary buttons", () => {
+    const service = new LineService("secret", "token", createLogger("silent"));
+    const message = service.createGamesMessage([{ gameId: "TTOF", name: "食物語", sort: 1, enable: "Y" }]);
+    const payload = JSON.stringify(message.contents);
+
+    expect(payload).toContain('"backgroundColor":"#3D73AF"');
+    expect(payload).toContain('"color":"#76A0D0"');
+    expect(payload).not.toContain("#6C5CE7");
+  });
+
   it("creates retry and exit actions when a sheet search has no match", () => {
     const service = new LineService("secret", "token", createLogger("silent"));
     const message = service.createSearchNotFoundMessage("不存在");

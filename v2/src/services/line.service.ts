@@ -5,6 +5,8 @@ import type { Logger } from "../shared/logger.js";
 
 const LINE_REPLY_URL = "https://api.line.me/v2/bot/message/reply";
 const MAX_REPLY_MESSAGES = 5;
+const FLEX_HEADER_COLOR = "#3D73AF";
+const FLEX_PRIMARY_BUTTON_COLOR = "#76A0D0";
 
 export class LineService {
   constructor(
@@ -105,7 +107,7 @@ export class LineService {
       altText: truncate(`${title}攻略結果`, 400),
       contents: {
         type: "bubble",
-        header: { type: "box", layout: "vertical", backgroundColor: "#6C5CE7", contents: [{ type: "text", text: truncate(title, 120), color: "#FFFFFF", weight: "bold", size: "xl", wrap: true }] },
+        header: { type: "box", layout: "vertical", backgroundColor: FLEX_HEADER_COLOR, contents: [{ type: "text", text: truncate(title, 120), color: "#FFFFFF", weight: "bold", size: "xl", wrap: true }] },
         body: { type: "box", layout: "vertical", contents: body.length > 0 ? body : [{ type: "text", text: "這筆資料沒有可顯示的內容。", wrap: true }] },
         footer: {
           type: "box", layout: "vertical", spacing: "sm", contents: [
@@ -136,7 +138,7 @@ function menuMessage(title: string, prompt: string, buttons: Record<string, unkn
 function menuBubble(title: string, prompt: string, buttons: Record<string, unknown>[]): Record<string, unknown> {
   return {
     type: "bubble",
-    header: { type: "box", layout: "vertical", backgroundColor: "#6C5CE7", contents: [{ type: "text", text: title, color: "#FFFFFF", weight: "bold", size: "xl" }] },
+    header: { type: "box", layout: "vertical", backgroundColor: FLEX_HEADER_COLOR, contents: [{ type: "text", text: title, color: "#FFFFFF", weight: "bold", size: "xl" }] },
     body: { type: "box", layout: "vertical", contents: [{ type: "text", text: prompt, wrap: true }] },
     footer: { type: "box", layout: "vertical", spacing: "sm", contents: buttons }
   };
@@ -146,13 +148,14 @@ function postbackButton(label: string, data: string, style: "primary" | "seconda
   return {
     type: "button",
     style,
+    ...(style === "primary" ? { color: FLEX_PRIMARY_BUTTON_COLOR } : {}),
     height: "sm",
     action: { type: "postback", label: truncate(label || "未命名", 40), data, displayText: truncate(label || "未命名", 300) }
   };
 }
 
 function uriButton(label: string, uri: string): Record<string, unknown> {
-  return { type: "button", style: "primary", height: "sm", action: { type: "uri", label: truncate(label || "開啟連結", 40), uri } };
+  return { type: "button", style: "primary", color: FLEX_PRIMARY_BUTTON_COLOR, height: "sm", action: { type: "uri", label: truncate(label || "開啟連結", 40), uri } };
 }
 
 function params(values: Record<string, string>): string {
