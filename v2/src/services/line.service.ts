@@ -74,6 +74,20 @@ export class LineService {
     return menuMessage("搜尋結果", "找到多筆符合資料，請選擇：", buttons, "找不到候選資料。" );
   }
 
+  createMultipleGuideResultsMessages(rows: SheetRow[], titleColumn: string): LineMessage[] {
+    const blocks = rows.map((row, index) => {
+      const title = row[titleColumn]?.trim() || `結果 ${index + 1}`;
+      const fields = Object.entries(row)
+        .filter(([, value]) => value.trim() !== "")
+        .map(([label, value]) => `${label}：${value.trim()}`);
+      return [`【${index + 1}/${rows.length}｜${title}】`, ...fields].join("\n");
+    });
+
+    return packTextBlocks(blocks, "\n\n──────────\n\n", 5_000)
+      .slice(0, MAX_REPLY_MESSAGES)
+      .map((message) => this.text(message));
+  }
+
   createSearchNotFoundMessage(keyword: string): FlexMessage {
     const prompt = keyword
       ? `找不到符合「${keyword}」的攻略。你可以直接輸入新的關鍵字，或使用下方按鈕重新選擇攻略。`
@@ -179,4 +193,22 @@ function isHttpUrl(value: string): boolean {
 
 function chunk<T>(items: T[], size: number): T[][] {
   return Array.from({ length: Math.ceil(items.length / size) }, (_, index) => items.slice(index * size, (index + 1) * size));
+}
+
+function packTextBlocks(blocks: string[], separator: string, maxLength: number): string[] {
+  const messages: string[] = [];
+  let current = "";
+
+  for (const block of blocks) {
+    const next = current ? `${current}${separator}${block}` : block;
+    if (current && [...next].length > maxLength) {
+      messages.push(current);
+      current = block;
+    } else {
+      current = next;
+    }
+  }
+
+  if (current) messages.push(current);
+  return messages;
 }

@@ -64,6 +64,20 @@ describe("LineService", () => {
     expect(payload).toContain("%E5%BE%B7%E5%B7%9E%E6%89%92%E9%9B%9E+SP");
   });
 
+  it("renders every matching row as newline-separated text", () => {
+    const service = new LineService("secret", "token", createLogger("silent"));
+    const messages = service.createMultipleGuideResultsMessages([
+      { 類型: "主線", 關卡: "2-4", 回合: "1/2" },
+      { 類型: "試煉", 關卡: "2-4", 回合: "2/2" }
+    ], "關卡");
+
+    expect(messages).toHaveLength(1);
+    expect(messages[0]).toEqual({
+      type: "text",
+      text: "【1/2｜2-4】\n類型：主線\n關卡：2-4\n回合：1/2\n\n──────────\n\n【2/2｜2-4】\n類型：試煉\n關卡：2-4\n回合：2/2"
+    });
+  });
+
   it("uses a carousel instead of dropping large dynamic menus", () => {
     const service = new LineService("secret", "token", createLogger("silent"));
     const games = Array.from({ length: 11 }, (_, index) => ({
@@ -151,6 +165,37 @@ describe("MessageRouter search guards", () => {
     expect(messages[0]?.type).toBe("flex");
     expect(users.touch).toHaveBeenCalledOnce();
     expect(users.resetSearchState).not.toHaveBeenCalled();
+  });
+
+  it("shows every matching row and exits search mode when multiple rows match", async () => {
+    const user = { ...selectionUser, searchState: "MLQC_WESTLAND_STAGE" };
+    const users = {
+      touch: vi.fn(),
+      isSearchTimedOut: vi.fn(() => false),
+      resetSearchState: vi.fn(async (value: BotUser) => ({ ...value, state: "talk", searchState: "" }))
+    };
+    const rows = [
+      { 類型: "主線", 關卡: "2-4", 回合: "1/2" },
+      { 類型: "試煉", 關卡: "2-4", 回合: "2/2" }
+    ];
+    const guides = {
+      search: vi.fn(async () => ({
+        kind: "multiple",
+        node: { searchColumn: "關卡" },
+        rows
+      }))
+    };
+    const line = new LineService("secret", "token", createLogger("silent"));
+    const router = new MessageRouter(users as never, { handleChatMessage: vi.fn() } as never, guides as never, line, createLogger("silent"));
+
+    const messages = await router.route(event, user);
+
+    expect(messages).toHaveLength(1);
+    expect(messages[0]?.type).toBe("text");
+    expect(JSON.stringify(messages)).toContain("主線");
+    expect(JSON.stringify(messages)).toContain("試煉");
+    expect(users.resetSearchState).toHaveBeenCalledWith(user);
+    expect(users.touch).not.toHaveBeenCalled();
   });
 });
 

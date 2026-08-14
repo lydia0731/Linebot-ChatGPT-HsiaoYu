@@ -70,8 +70,8 @@ export class MessageRouter {
         await this.users.touch(user);
         return [this.line.text("找到的資料太多，請輸入更完整的關鍵字。")];
       case "multiple":
-        await this.users.touch(user);
-        return [this.line.createCandidatesMessage(user.searchState, result.node.searchColumn, result.rows)];
+        await this.users.resetSearchState(user);
+        return this.line.createMultipleGuideResultsMessages(result.rows, result.node.searchColumn);
       case "single":
         await this.users.resetSearchState(user);
         return [this.line.createGuideResultMessage(result.row, result.node.searchColumn)];
