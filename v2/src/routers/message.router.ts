@@ -20,7 +20,21 @@ export class MessageRouter {
       return [this.line.text("目前小優只支援文字訊息喔。")];
     }
 
-    const text = event.message.text;
+    const text = event.message.text.trim();
+
+    if (text === "遊戲攻略") {
+      await this.users.updateState(user, "search", "");
+      const games = await this.guides.getGames();
+      this.logger.info({ userKeyPrefix: user.userId.slice(0, 10) }, "Search started from rich-menu text");
+      return [this.line.createGamesMessage(games)];
+    }
+
+    if (text === "聊天模式") {
+      await this.users.updateState(user, "talk", "");
+      this.logger.info({ userKeyPrefix: user.userId.slice(0, 10) }, "Talk mode started from rich-menu text");
+      return [this.line.text("已切換到聊天模式，想聊什麼都可以喔！")];
+    }
+
     if (this.users.isSearchTimedOut(user)) {
       user = await this.users.resetSearchState(user);
       this.logger.info({ userKeyPrefix: user.userId.slice(0, 10) }, "Search timed out");

@@ -133,6 +133,56 @@ describe("MessageRouter search guards", () => {
   });
 });
 
+describe("MessageRouter rich-menu text commands", () => {
+  const user: BotUser = {
+    userId: "key",
+    state: "talk",
+    searchState: "",
+    time: "2026-08-14T01:00:00.000Z",
+    admin: "N",
+    login: "N"
+  };
+
+  it("starts guide search when the rich menu sends 遊戲攻略 as text", async () => {
+    const users = {
+      updateState: vi.fn(async (value: BotUser) => ({ ...value, state: "search", searchState: "" })),
+      isSearchTimedOut: vi.fn(() => false)
+    };
+    const chat = { handleChatMessage: vi.fn() };
+    const guides = {
+      getGames: vi.fn(async () => [{ gameId: "TTOF", name: "食物語", sort: 1, enable: "Y" }])
+    };
+    const line = new LineService("secret", "token", createLogger("silent"));
+    const router = new MessageRouter(users as never, chat as never, guides as never, line, createLogger("silent"));
+    const event = { type: "message", message: { type: "text", text: "遊戲攻略" } } as MessageEvent;
+
+    const messages = await router.route(event, user);
+
+    expect(users.updateState).toHaveBeenCalledWith(user, "search", "");
+    expect(guides.getGames).toHaveBeenCalledOnce();
+    expect(chat.handleChatMessage).not.toHaveBeenCalled();
+    expect(messages[0]?.type).toBe("flex");
+  });
+
+  it("returns to talk mode when the rich menu sends 聊天模式 as text", async () => {
+    const searchUser = { ...user, state: "search" as const, searchState: "TTOF_SOUL" };
+    const users = {
+      updateState: vi.fn(async (value: BotUser) => ({ ...value, state: "talk", searchState: "" })),
+      isSearchTimedOut: vi.fn(() => false)
+    };
+    const chat = { handleChatMessage: vi.fn() };
+    const line = new LineService("secret", "token", createLogger("silent"));
+    const router = new MessageRouter(users as never, chat as never, {} as never, line, createLogger("silent"));
+    const event = { type: "message", message: { type: "text", text: "聊天模式" } } as MessageEvent;
+
+    const messages = await router.route(event, searchUser);
+
+    expect(users.updateState).toHaveBeenCalledWith(searchUser, "talk", "");
+    expect(chat.handleChatMessage).not.toHaveBeenCalled();
+    expect(messages[0]?.type).toBe("text");
+  });
+});
+
 describe("UserService", () => {
   const existing: BotUser = {
     userId: "key",
