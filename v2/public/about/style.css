@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;600&display=swap");
+
+:root{--ink:#242422;--charcoal:#30302e;--paper:#f4f2ed;--white:#fbfaf7;--radius:30px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#deddd8}
+body{margin:0;color:var(--ink);font-family:"Noto Sans TC","PingFang TC",sans-serif;background:radial-gradient(circle at 50% 0,#f1f0ec,#d6d5d0 76%);line-height:1.9}
+a{color:inherit;text-decoration:none}
+.phone-shell{width:390px;max-width:100%;margin:0 auto;background:var(--paper);box-shadow:0 0 80px rgba(25,25,24,.12);overflow:hidden}
+.topbar{height:72px;padding:env(safe-area-inset-top) 22px 0;display:flex;align-items:center;position:absolute;width:390px;max-width:100%;z-index:10}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:.1em}
+.logo span{width:34px;height:34px;border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;font-family:"Noto Serif TC",serif}
+.hero{padding:95px 22px 72px;min-height:760px}
+.bird-card{height:350px;margin-bottom:38px;position:relative;overflow:hidden;border-radius:var(--radius);background:#30302e}
+.moon{width:215px;height:215px;border-radius:50%;background:#efede7;position:absolute;right:-20px;top:34px;box-shadow:inset 0 0 50px rgba(50,50,48,.08)}
+.bird-head{position:absolute;width:106px;height:106px;border-radius:50%;background:#282826;right:72px;top:72px;z-index:2}
+.bird-head:after{content:"";position:absolute;right:-48px;top:42px;border-left:58px solid #f2f0ea;border-top:12px solid transparent;border-bottom:12px solid transparent}
+.bird-head i{position:absolute;width:12px;height:12px;background:#f7f6f2;border:4px solid #52514d;border-radius:50%;right:24px;top:32px}
+.bird-body{position:absolute;width:245px;height:250px;border-radius:55% 48% 25px 25px;background:#323230;right:-16px;bottom:-65px;transform:rotate(-10deg);display:grid;place-items:center;color:#aaa9a3;font:90px/1 "Noto Serif TC",serif}
+.tail{position:absolute;width:175px;height:28px;border-radius:40px;background:#252523;left:-37px;bottom:76px;transform:rotate(-28deg)}
+.bird-card>p{position:absolute;bottom:8px;left:24px;color:#efede7;font-size:8px;letter-spacing:.25em;z-index:3}
+.section-tag,.mini-label{font-size:9px;font-weight:700;letter-spacing:.24em}
+.hero h1,.paper-section h2,.dark-section h2,.name-section h2,.feature-card h3,footer h2{font-family:"Noto Serif TC",serif;font-weight:600;line-height:1.35;letter-spacing:-.04em}
+.hero h1{font-size:29px;margin:17px 0 20px;letter-spacing:-.02em}
+.hero-text{font-size:16px;color:#5e5d58;line-height:1.9;margin:0 0 30px}
+.paper-section,.dark-section,.name-section,footer{padding:75px 22px}
+.paper-section h2,.dark-section h2,.name-section h2{font-size:24px;margin:28px 0 24px}
+.section-tag{color:#77756f;display:flex;align-items:center;gap:11px}
+.section-tag span{width:32px;height:32px;border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;letter-spacing:0;flex:none}
+.single-line{white-space:nowrap;font-size:21px!important;letter-spacing:-.07em!important}
+.copy-card,.timeline-card{background:var(--white);padding:25px;border-radius:var(--radius);box-shadow:0 12px 32px rgba(30,30,28,.06)}
+.copy-card p,.intro-copy p,.feature-card p,.timeline-card p,.soft-dark-card p,footer>p{font-size:14px;color:#686762;margin:0 0 17px}
+.copy-card p:last-child,.feature-card p:last-child,.soft-dark-card p:last-child{margin-bottom:0}
+blockquote{margin:22px 0 0;padding:27px;background:#dedbd4;border-radius:var(--radius);font:500 18px/1.9 "Noto Serif TC",serif}
+.dark-section{background:var(--charcoal);color:var(--white);border-radius:38px 38px 0 0}
+.pale{color:#aaa8a1}
+.intro-copy{padding:0 6px 22px}
+.intro-copy p{color:#bbb9b2}
+.feature-card{border-radius:var(--radius);padding:27px;margin-top:18px}
+.charcoal{background:#30302e;border:1px solid #555550;color:var(--white)}
+.card-number{display:flex;justify-content:space-between;align-items:center;font:11px/1 serif;margin-bottom:25px}
+.chat-icon{width:42px;height:34px;border:1px solid;border-radius:16px 16px 16px 5px;display:grid;place-items:center;font-family:sans-serif;letter-spacing:2px}
+.search-icon{width:32px;height:32px;border:1px solid;border-radius:50%;position:relative}
+.search-icon:after{content:"";position:absolute;width:12px;height:1px;background:currentColor;right:-8px;bottom:1px;transform:rotate(45deg)}
+.feature-card h3{font-size:20px;margin:5px 0 21px}
+.feature-card.charcoal p{color:#f0efeb}
+.feature-card.charcoal .mini-label{color:#d1cfc8}
+.mini-label{margin-bottom:0!important}
+.timeline-card{padding:8px 22px}
+.timeline-card article{display:grid;grid-template-columns:48px 1fr;gap:7px;padding:27px 0;border-bottom:1px solid #dedcd6}
+.timeline-card article:last-child{border:0}
+.timeline-card article>span{font:600 16px/1.5 serif;width:39px;height:39px;border-radius:50%;background:#e2e0da;display:grid;place-items:center}
+.timeline-card p{font-size:13px}
+.name-section{background:#222220;color:var(--white);border-radius:0 0 38px 38px}
+.soft-dark-card{padding:27px;background:#30302e;border:1px solid #454542;border-radius:var(--radius)}
+.soft-dark-card p{color:#bdbbb4}
+.statement{color:#aaa8a2;font-size:14px;margin:35px 5px 12px}
+.final-line{font:600 16px/1.5 "Noto Serif TC",serif;margin:0 4px;white-space:nowrap;color:#f1efe8}
+footer{text-align:center;min-height:610px;display:flex;flex-direction:column;align-items:center;padding-bottom:max(75px,env(safe-area-inset-bottom))}
+footer .section-tag{align-self:flex-start}
+footer h2{margin:55px 0 14px}
+footer>p{font-size:14px;max-width:305px}
+.contact-button{width:100%;padding:12px 12px 12px 22px;margin-top:26px;background:#d5d3cd;color:var(--ink);border-radius:999px;display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:600;transition:transform .2s ease,background-color .2s ease}
+.contact-button:hover{background:#cbc9c3;transform:translateY(-1px)}
+.contact-button:focus-visible{outline:3px solid #77756f;outline-offset:3px}
+.contact-button span{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#eceae5;color:var(--ink)}
+.footer-meta{width:100%;margin-top:auto;border-top:1px solid #d8d5cf;padding-top:20px;display:flex;justify-content:space-between;font-size:8px;letter-spacing:.17em;color:#7c7a74}
+@media(max-width:389px){.paper-section,.dark-section,.name-section,footer{padding-left:18px;padding-right:18px}.hero{padding-left:18px;padding-right:18px}.single-line{white-space:normal}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.contact-button{transition:none}}

@@ -1,5 +1,7 @@
 import { createHmac } from "node:crypto";
+import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
+import { createApp } from "../src/app.js";
 import type { BotUser, MessageEvent } from "../src/domain/types.js";
 import { USER_SAFE_FALLBACK_MESSAGE } from "../src/controllers/webhook.controller.js";
 import { MessageRouter } from "../src/routers/message.router.js";
@@ -7,6 +9,33 @@ import { createLogger } from "../src/shared/logger.js";
 import { findMatchingRows, normalizeKeyword } from "../src/services/google-sheets.service.js";
 import { LineService } from "../src/services/line.service.js";
 import { UserService } from "../src/services/user.service.js";
+
+describe("About page", () => {
+  it("serves the static page and its stylesheet", async () => {
+    const app = createApp({ handle: vi.fn() } as never);
+    const server = app.listen(0, "127.0.0.1");
+
+    try {
+      await new Promise<void>((resolve) => server.once("listening", resolve));
+      const { port } = server.address() as AddressInfo;
+      const [pageResponse, styleResponse] = await Promise.all([
+        fetch(`http://127.0.0.1:${port}/about`),
+        fetch(`http://127.0.0.1:${port}/about/style.css`)
+      ]);
+      const page = await pageResponse.text();
+
+      expect(pageResponse.status).toBe(200);
+      expect(pageResponse.headers.get("content-type")).toContain("text/html");
+      expect(page).toContain("嗨，我是小優！");
+      expect(page).toContain("to=vul3cl4mail%40gmail.com");
+      expect(page).toContain("su=LINE%E5%B0%8F%E5%84%AA-%E8%81%AF%E7%B9%AB%E9%96%8B%E7%99%BC%E8%80%85");
+      expect(styleResponse.status).toBe(200);
+      expect(styleResponse.headers.get("content-type")).toContain("text/css");
+    } finally {
+      await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
+    }
+  });
+});
 
 describe("Webhook user-safe errors", () => {
   it("does not expose internal configuration details to LINE users", () => {

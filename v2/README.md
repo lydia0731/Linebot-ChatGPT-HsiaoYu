@@ -21,9 +21,14 @@ npm run dev
 服務提供：
 
 - `GET /health`：健康檢查
+- `GET /about`：〈認識小優〉靜態介紹頁
 - `POST /webhook`：LINE Webhook（驗證 `x-line-signature`）
 
 請將 LINE Developers Console 的 Webhook URL 設為公開 HTTPS 網址加上 `/webhook`，並在 Rich Menu 的「查詢攻略」使用 Postback action，data 設為 `action=start_search`。
+
+## 認識小優 Web
+
+部署後，請只把既有 Rich Menu 左上角「認識小優」區塊設成 URI action，網址填入 `https://<你的 Railway 網域>/about`；其餘既有區塊保持不變。頁面會在 LINE 內建瀏覽器開啟，不需要建立 LIFF App，也不讀取 LINE Profile。
 
 ## 環境變數
 
