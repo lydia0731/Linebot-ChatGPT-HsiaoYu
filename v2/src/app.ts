@@ -39,7 +39,7 @@ export function createApp(webhook: WebhookController, aboutConfig: AboutPageConf
   app.get(["/about", "/about/", "/about/index.html"], (_request, response) => {
     response.set("Cache-Control", "no-cache").type("html").send(aboutPage);
   });
-  app.use("/about", express.static(aboutDirectory, { index: false, maxAge: "1h" }));
+  app.use("/about", express.static(aboutDirectory, { index: false, maxAge: 0 }));
 
   app.post("/webhook", express.raw({ type: "application/json", limit: "1mb" }), webhook.handle);
 

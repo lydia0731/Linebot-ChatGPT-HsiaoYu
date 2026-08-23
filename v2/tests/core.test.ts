@@ -32,6 +32,7 @@ describe("About page", () => {
       expect(pageResponse.status).toBe(200);
       expect(pageResponse.headers.get("content-type")).toContain("text/html");
       expect(page).toContain("嗨，我是小優！");
+      expect(page).toContain('/about/style.css?v=2');
       expect(page).toContain('/about/image/xiaoyu.jpg');
       expect(page).toContain("to=developer%40example.com");
       expect(page).toContain("su=Contact+developer");
