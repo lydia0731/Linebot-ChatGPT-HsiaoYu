@@ -48,6 +48,40 @@ describe("About page", () => {
   });
 });
 
+describe("Portfolio page", () => {
+  it("serves the project portfolio and its stylesheet", async () => {
+    const app = createApp({ handle: vi.fn() } as never, {
+      contactEmail: "developer@example.com",
+      contactSubject: "Contact developer"
+    });
+    const server = app.listen(0, "127.0.0.1");
+
+    try {
+      await new Promise<void>((resolve) => server.once("listening", resolve));
+      const { port } = server.address() as AddressInfo;
+      const [pageResponse, styleResponse] = await Promise.all([
+        fetch(`http://127.0.0.1:${port}/portfolio`),
+        fetch(`http://127.0.0.1:${port}/portfolio/style.css`)
+      ]);
+      const page = await pageResponse.text();
+
+      expect(pageResponse.status).toBe(200);
+      expect(pageResponse.headers.get("content-type")).toContain("text/html");
+      expect(page).toContain("把心中的願望，");
+      expect(page).toContain("變成能被使用的產品。");
+      expect(page).toContain("AI Mate");
+      expect(page).toContain("LINE 小優 V2");
+      expect(page).toContain("LINE 德州扒機");
+      expect(page).toContain("https://github.com/lydia0731/ai-companion");
+      expect(page).not.toContain("聯絡");
+      expect(styleResponse.status).toBe(200);
+      expect(styleResponse.headers.get("content-type")).toContain("text/css");
+    } finally {
+      await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
+    }
+  });
+});
+
 describe("Webhook user-safe errors", () => {
   it("does not expose internal configuration details to LINE users", () => {
     expect(USER_SAFE_FALLBACK_MESSAGE).not.toContain("GuideNode");

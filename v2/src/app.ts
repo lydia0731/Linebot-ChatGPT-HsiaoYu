@@ -41,6 +41,12 @@ export function createApp(webhook: WebhookController, aboutConfig: AboutPageConf
   });
   app.use("/about", express.static(aboutDirectory, { index: false, maxAge: 0 }));
 
+  const portfolioDirectory = join(process.cwd(), "public", "portfolio");
+  app.get(["/portfolio", "/portfolio/"], (_request, response) => {
+    response.set("Cache-Control", "no-cache").sendFile(join(portfolioDirectory, "index.html"));
+  });
+  app.use("/portfolio", express.static(portfolioDirectory, { index: false, maxAge: 0 }));
+
   app.post("/webhook", express.raw({ type: "application/json", limit: "1mb" }), webhook.handle);
 
   app.use((_request, response) => {
