@@ -30,5 +30,8 @@ const messageRouter = new MessageRouter(users, chat, guides, line, logger);
 const postbackRouter = new PostbackRouter(users, guides, line, logger);
 const webhook = new WebhookController(line, users, messageRouter, postbackRouter, logger);
 
-const app = createApp(webhook);
+const app = createApp(webhook, {
+  contactEmail: config.contactEmail,
+  contactSubject: config.contactSubject
+});
 app.listen(config.port, () => logger.info({ port: config.port }, "HsiaoYu LINE Bot V2 started"));

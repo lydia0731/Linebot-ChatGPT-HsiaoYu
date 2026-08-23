@@ -40,6 +40,8 @@ npm run dev
 - `OPENAI_MODEL`
 - `GOOGLE_SPREADSHEET_ID`
 - `GOOGLE_SERVICE_ACCOUNT_CREDENTIALS`：完整 service account JSON 的單行字串
+- `CONTACT_EMAIL`：由部署環境設定的開發者聯絡信箱，沒有預設值
+- `CONTACT_SUBJECT`：聯絡郵件主旨，未設定時使用程式預設值
 - `SEARCH_TIMEOUT_MINUTES`：預設 30
 
 不要 Commit `.env`。請把既有 Spreadsheet 分享給 service account 的 `client_email`，並給予編輯者權限，讓 Bot 能新增及更新 `Users`。

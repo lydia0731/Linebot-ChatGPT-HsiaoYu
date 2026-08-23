@@ -10,14 +10,10 @@ a{color:inherit;text-decoration:none}
 .logo{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:.1em}
 .logo span{width:34px;height:34px;border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;font-family:"Noto Serif TC",serif}
 .hero{padding:95px 22px 72px;min-height:760px}
-.bird-card{height:350px;margin-bottom:38px;position:relative;overflow:hidden;border-radius:var(--radius);background:#30302e}
-.moon{width:215px;height:215px;border-radius:50%;background:#efede7;position:absolute;right:-20px;top:34px;box-shadow:inset 0 0 50px rgba(50,50,48,.08)}
-.bird-head{position:absolute;width:106px;height:106px;border-radius:50%;background:#282826;right:72px;top:72px;z-index:2}
-.bird-head:after{content:"";position:absolute;right:-48px;top:42px;border-left:58px solid #f2f0ea;border-top:12px solid transparent;border-bottom:12px solid transparent}
-.bird-head i{position:absolute;width:12px;height:12px;background:#f7f6f2;border:4px solid #52514d;border-radius:50%;right:24px;top:32px}
-.bird-body{position:absolute;width:245px;height:250px;border-radius:55% 48% 25px 25px;background:#323230;right:-16px;bottom:-65px;transform:rotate(-10deg);display:grid;place-items:center;color:#aaa9a3;font:90px/1 "Noto Serif TC",serif}
-.tail{position:absolute;width:175px;height:28px;border-radius:40px;background:#252523;left:-37px;bottom:76px;transform:rotate(-28deg)}
-.bird-card>p{position:absolute;bottom:8px;left:24px;color:#efede7;font-size:8px;letter-spacing:.25em;z-index:3}
+.bird-card{height:350px;margin:0 0 38px;position:relative;overflow:hidden;border-radius:var(--radius);background:#30302e}
+.bird-card:after{content:"";position:absolute;inset:auto 0 0;height:30%;background:linear-gradient(transparent,rgba(20,20,18,.42));pointer-events:none}
+.bird-card-image{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.bird-card figcaption{position:absolute;bottom:13px;left:24px;color:#fff;font-size:8px;font-weight:600;letter-spacing:.25em;text-shadow:0 1px 8px rgba(0,0,0,.7);z-index:1}
 .section-tag,.mini-label{font-size:9px;font-weight:700;letter-spacing:.24em}
 .hero h1,.paper-section h2,.dark-section h2,.name-section h2,.feature-card h3,footer h2{font-family:"Noto Serif TC",serif;font-weight:600;line-height:1.35;letter-spacing:-.04em}
 .hero h1{font-size:29px;margin:17px 0 20px;letter-spacing:-.02em}

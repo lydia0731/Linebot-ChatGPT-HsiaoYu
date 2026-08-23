@@ -12,25 +12,35 @@ import { UserService } from "../src/services/user.service.js";
 
 describe("About page", () => {
   it("serves the static page and its stylesheet", async () => {
-    const app = createApp({ handle: vi.fn() } as never);
+    const app = createApp({ handle: vi.fn() } as never, {
+      contactEmail: "developer@example.com",
+      contactSubject: "Contact developer"
+    });
     const server = app.listen(0, "127.0.0.1");
 
     try {
       await new Promise<void>((resolve) => server.once("listening", resolve));
       const { port } = server.address() as AddressInfo;
-      const [pageResponse, styleResponse] = await Promise.all([
+      const [pageResponse, styleResponse, imageResponse] = await Promise.all([
         fetch(`http://127.0.0.1:${port}/about`),
-        fetch(`http://127.0.0.1:${port}/about/style.css`)
+        fetch(`http://127.0.0.1:${port}/about/style.css`),
+        fetch(`http://127.0.0.1:${port}/about/image/xiaoyu.jpg`)
       ]);
       const page = await pageResponse.text();
+      const image = await imageResponse.arrayBuffer();
 
       expect(pageResponse.status).toBe(200);
       expect(pageResponse.headers.get("content-type")).toContain("text/html");
       expect(page).toContain("嗨，我是小優！");
-      expect(page).toContain("to=vul3cl4mail%40gmail.com");
-      expect(page).toContain("su=LINE%E5%B0%8F%E5%84%AA-%E8%81%AF%E7%B9%AB%E9%96%8B%E7%99%BC%E8%80%85");
+      expect(page).toContain('/about/image/xiaoyu.jpg');
+      expect(page).toContain("to=developer%40example.com");
+      expect(page).toContain("su=Contact+developer");
+      expect(page).not.toContain("__CONTACT_URL__");
       expect(styleResponse.status).toBe(200);
       expect(styleResponse.headers.get("content-type")).toContain("text/css");
+      expect(imageResponse.status).toBe(200);
+      expect(imageResponse.headers.get("content-type")).toContain("image/jpeg");
+      expect(image.byteLength).toBeGreaterThan(0);
     } finally {
       await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     }

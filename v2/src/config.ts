@@ -12,6 +12,8 @@ const schema = z.object({
   OPENAI_TIMEOUT_MS: z.coerce.number().int().positive().default(15_000),
   GOOGLE_SPREADSHEET_ID: z.string().min(1),
   GOOGLE_SERVICE_ACCOUNT_CREDENTIALS: z.string().min(1),
+  CONTACT_EMAIL: z.string().email("CONTACT_EMAIL 必須是有效的 Email"),
+  CONTACT_SUBJECT: z.string().min(1).default("LINE小優-聯繫開發者"),
   SEARCH_TIMEOUT_MINUTES: z.coerce.number().positive().default(30),
   LOG_LEVEL: z.string().default("info")
 });
@@ -27,6 +29,8 @@ export type AppConfig = {
   openAiTimeoutMs: number;
   googleSpreadsheetId: string;
   googleCredentials: { client_email: string; private_key: string };
+  contactEmail: string;
+  contactSubject: string;
   searchTimeoutMinutes: number;
   logLevel: string;
 };
@@ -57,6 +61,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     openAiTimeoutMs: parsed.OPENAI_TIMEOUT_MS,
     googleSpreadsheetId: parsed.GOOGLE_SPREADSHEET_ID,
     googleCredentials: credentials,
+    contactEmail: parsed.CONTACT_EMAIL,
+    contactSubject: parsed.CONTACT_SUBJECT,
     searchTimeoutMinutes: parsed.SEARCH_TIMEOUT_MINUTES,
     logLevel: parsed.LOG_LEVEL
   };
